@@ -1,0 +1,299 @@
+<html>
+    <head>
+        <title>Chat ZapZop</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/jquery-3.2.1.min.js"></script>
+        <style type="text/css">
+
+        #messageArea{
+            display: none;
+        }
+
+        .colorgraph {
+          height: 5px;
+          border-top: 0;
+          background: #c4e17f;
+          border-radius: 5px;
+          background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+          background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+          background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+          background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+        }
+        /* CSS used here will be applied after bootstrap.css */
+
+  /* Add a black background color to the top navigation */
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+
+.navbar-brand {
+  padding: 0px;
+}
+.navbar-brand>img {
+  height: 100%;
+  padding: 15px;
+  width: auto;
+}
+
+    @media only screen and (max-width : 768px){
+  .example-8 .navbar-brand {
+  padding: 0px;
+  transform: translateX(-50%);
+  left: 50%;
+  position: absolute;
+}
+.example-8 .navbar-brand>img {
+  height: 100%;
+  width: auto;
+  padding: 7px 14px; 
+}
+}
+
+
+/* EXAMPLE 8 - Center Background */
+.example-8 .navbar-brand {
+  background: url(logo.png) center / contain no-repeat;
+  width: 200px;
+  transform: translateX(-50%);
+  left: 50%;
+  position: absolute;
+}
+
+
+.img-responsive {
+    width:700px; /* This value will depend on what size you want for your loading image, let's say it's 50px */
+    height: 500px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-top:-250px; /* This needs to be half of the height */
+    margin-left:-350px; /* This needs to be half of the width */
+}
+
+   
+    
+    </style>
+    </head>
+
+    <body>
+
+                <nav class="navbar navbar-inverse navbar-static-top example-8">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar8">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand text-hide" href="#">
+        </a>
+      </div>
+      <div id="navbar8" class="navbar-collapse collapse">
+        
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+
+
+
+
+        <div class="container">
+            <div id="userArea" class="row" style="margin-top: 60px;">
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                    <form role="form" id="userForm">
+                        <fieldset>
+                            <h2>Login</h2>
+                            <hr class="colorgraph">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" placeholder="Nome..."  id="username">
+                            </div>
+                            <hr class="colorgraph">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <input type="submit" class="btn btn-lg btn-success btn-block" value="Logar">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Fim da area de login -->
+
+            <!-- Area do chat -->
+            <div class="row" id="messageArea" style="margin-top: 60px;">
+                <div class="col-md-4">
+                    <div class="well">
+                        <h3>Online Users</h3>
+                        <ul class="list-group" id="users"></ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="chat" id="chat"></div>
+
+                    <form id="messageForm">
+                        <div class="form-group">
+                            <label>Menssagem:</label>
+                            <textarea class="form-control" id="message">
+                                
+                            </textarea>
+                            <br>
+                            <div class="row">
+                              <div class="col-md-1 col-sm-1">
+                                <input type="submit" class="btn btn-primary" value="Enviar"/>
+                              </div>
+                              <div class="col-md-1 col-sm-1">
+                                <img id="emoticon1" src="s2.jpg" height="25"/>
+                              </div>
+                              <div class="col-md-1 col-sm-1">
+                                <img id="emoticon2" src="centopeia.jpg" height="25"/>
+                              </div>
+                              <div class="col-md-1 col-sm-1">
+                                <img id="emoticon3" src="cliff.jpg" height="25"/>
+                              </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- area dos emoticons -->
+                <div id="emoji1">
+                  <img id="" src="s2.jpg" height="1024" class="img-responsive center-block pos" />
+                </div>
+                <div id="emoji2">
+                  <img id="" src="centopeia.jpg" height="1024" class="img-responsive center-block pos" />
+                </div>
+                <div id="emoji3">
+                  <img id="" src="cliff.jpg" height="1024" class="img-responsive center-block pos" />
+                </div>
+
+                <!-- end emoticons -->
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        $(function(){
+            initEmoji();
+            var socket = io.connect();
+            var $messageForm = $("#messageForm");
+            var $messageArea = $("#messageArea");
+            var $message = $("#message");
+            var $chat = $("#chat");
+            var $username = $("#username");
+            var $userForm = $("#userForm");
+            var $userArea = $("#userArea");
+            var $users = $("#users");
+            var $emoticon1 = $("#emoticon1");
+            var $emoticon2 = $("#emoticon2");
+            var $emoticon3 = $("#emoticon3");
+            var $emoji = $("#emoji");
+
+
+
+
+            //quando ocorrer o submit do login
+            $userForm.submit(function(e){
+                e.preventDefault();
+                num = Math.floor(Math.random() * 6);
+                //console.log(num); 
+                //cor da barra
+                if(num==0){
+                    cor = '#c4e17f';
+                } else if(num==1){
+                    cor = '#f7fdca';
+                } else if(num==2){
+                    cor = '#fecf71';
+                } else if(num==3){
+                    cor = '#f0776c';
+                } else if(num==4){
+                    cor = '#db9dbe';
+                } else if(num==5){
+                    cor = '#669ae1';
+                }else if(num==6){
+                    cor = '#62c2e4';
+                }
+                
+                console.log(num);
+                //emitir um novo usuario para o socket
+                socket.emit('new user',{user:$username.val(),color:cor},function(data){
+                    if(data){
+                        $userArea.hide();
+                        $messageArea.show();
+                    }
+                });
+            });
+
+
+
+            //quando ocorrer o submit da menssagem
+            $messageForm.submit(function(e){
+                e.preventDefault();
+                //envia a msg pro socket
+                socket.emit('send message',$message.val());
+                $message.val('');
+            });
+
+
+            //assim que uma new message chega para o socket
+            socket.on('new message',function(data){
+                $chat.append('<div class="well" style="background:'+data.color+'"><strong>'+data.username+': </strong>'+data.msg+'</div>');
+            });
+
+
+
+            //assim que uma get user chegar
+            socket.on('get users',function(data){
+                var html = '';
+                for(i = 0;i< data.length;i++){
+                    html += '<li class="list-group-item">'+data[i]+'</li>';
+                }
+                $users.html(html);
+            });
+
+
+            //emitir um emoticon
+            $emoticon1.click(function(){
+              socket.emit('send emoji',1);
+            });
+            $emoticon2.click(function(){
+              socket.emit('send emoji',2);
+            });
+            $emoticon3.click(function(){
+              socket.emit('send emoji',3);
+            });
+
+
+            //chegada de um emoji
+            socket.on('new emoji',function(data){
+              if(data==1){
+                $( "#emoji1" ).fadeIn(1000).delay(2000).fadeOut(1000);
+              } else if(data==2){
+                $( "#emoji2" ).fadeIn(1000).delay(2000).fadeOut(1000);
+              } else if(data==3){
+                $( "#emoji3" ).fadeIn(1000).delay(2000).fadeOut(1000);
+              }
+            });
+
+
+            //escondendo os emojis
+            function initEmoji(){
+              $("#emoji1").hide();
+              $("#emoji2").hide();
+              $("#emoji3").hide();
+            }
+        });
+    </script>
+    
+</html>
