@@ -1,1 +1,3 @@
-Exemplo de Chat usando node, socket.io e express.
+Exemple of chat using SocketIO and Node
+
+
